@@ -17,10 +17,16 @@
  */
 
 #include "swoole_http_log.h"
+#include "Server.h"
+#include <stdio.h>
 
-static int log_enable = 0;
+static FILE *log_fp = NULL;
 
-static FILE *http_log_fp = NULL;
+// old callback
+static void (*oldOnClose)(swServer *serv, swDataHead *);
+
+// Replaced callback
+static void swoole_http_on_close(swServer *serv, swDataHead *head);
 
 int swoole_http_log_init(swServer *serv)
 {
@@ -28,10 +34,21 @@ int swoole_http_log_init(swServer *serv)
         return SW_OK;
     }
 
-    http_log_fp = fopen(log_file, "a+");
-    if (!http_log_fp) {
+    log_fp = fopen(serv->http_access_log, "a+");
+    if (!log_fp) {
         return SW_ERR;
     }
 
+    // Replace callback
+    oldOnClose = serv->onClose;
+    serv->onClose = swoole_http_on_close;
+
     return SW_OK;
+}
+
+static void swoole_http_on_close(swServer *serv, swDataHead *head)
+{
+    // todo support
+    fprintf(log_fp, "%s %s %s:%d %f %f %s %s %s %s %d %d %s %s %s");
+    oldOnClose(serv, head);
 }

@@ -262,7 +262,7 @@ if test "$PHP_SWOOLE" != "no"; then
     AC_CHECK_LIB(z, gzgets, [
         AC_DEFINE(SW_HAVE_ZLIB, 1, [have zlib])
         PHP_ADD_LIBRARY(z, 1, SWOOLE_SHARED_LIBADD)
-    ])    
+    ])
 
     swoole_source_file="swoole.c \
         swoole_server.c \
@@ -282,6 +282,7 @@ if test "$PHP_SWOOLE" != "no"; then
         swoole_http_v2_client.c \
         swoole_websocket_server.c \
         swoole_http_client.c \
+        swoole_http_log.c \
         swoole_mysql.c \
         swoole_redis.c \
         swoole_redis_server.c \
