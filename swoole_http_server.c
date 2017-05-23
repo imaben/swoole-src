@@ -45,6 +45,8 @@
 #include "thirdparty/picohttpparser/picohttpparser.h"
 #endif
 
+#include "swoole_http_log.h"
+
 static swArray *http_client_array;
 
 swString *swoole_http_buffer;
@@ -1512,6 +1514,12 @@ static PHP_METHOD(swoole_http_server, start)
     //for is_uploaded_file and move_uploaded_file
     ALLOC_HASHTABLE(SG(rfc1867_uploaded_files));
     zend_hash_init(SG(rfc1867_uploaded_files), 8, NULL, NULL, 0);
+
+    // Initialize http log
+    if (swoole_http_log_init(serv) < 0) {
+        swoole_php_fatal_error(E_ERROR, "Initialize http log failed");
+        RETURN_FALSE;
+    }
 
     php_swoole_server_before_start(serv, getThis() TSRMLS_CC);
 

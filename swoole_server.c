@@ -1664,6 +1664,12 @@ PHP_METHOD(swoole_server, set)
         }
         serv->upload_tmp_dir = sw_strndup(Z_STRVAL_P(v), Z_STRLEN_P(v));
     }
+	// http access log path
+	if (php_swoole_array_get_value(vht, "http_access_log", v))
+	{
+		convert_to_string(v);
+		serv->http_access_log = sw_strndup(Z_STRVAL_P(v), Z_STRLEN_P(v));
+	}
 
     /**
      * buffer input size

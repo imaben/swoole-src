@@ -413,7 +413,7 @@ struct _swServer
 
     int *cpu_affinity_available;
     int cpu_affinity_available_num;
-    
+
     uint16_t listen_port_num;
     time_t reload_time;
 
@@ -449,6 +449,11 @@ struct _swServer
      * temporary directory for HTTP uploaded file.
      */
     char *upload_tmp_dir;
+
+    /**
+     * http access log path
+     */
+    char *http_access_log;
 
     /**
      * master process pid
